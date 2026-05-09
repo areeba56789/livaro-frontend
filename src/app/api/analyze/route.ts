@@ -74,7 +74,7 @@ export async function POST(req: Request) {
       }
     });
 
-    const queryVector = embedResponse.embeddings[0].values;
+    const queryVector = embedResponse.embeddings?.[0]?.values;
 
     if (!queryVector) {
       return NextResponse.json({ error: 'Failed to generate embedding', status: 500 }, { status: 500 });
