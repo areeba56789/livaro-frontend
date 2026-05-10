@@ -2,14 +2,9 @@ import { NextResponse } from 'next/server';
 import { createClient } from '@supabase/supabase-js';
 import { GoogleGenAI, Type, Schema } from '@google/genai';
 
-// Setup Supabase Client
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
-const supabaseServiceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY!;
-const supabase = createClient(supabaseUrl, supabaseServiceRoleKey);
-
-// Setup Gemini
-const GEMINI_API_KEY = process.env.GEMINI_API_KEY!;
-const ai = new GoogleGenAI({ apiKey: GEMINI_API_KEY });
+// Lazy Setup to prevent Next.js build-time module evaluation errors
+const getSupabase = () => createClient(process.env.NEXT_PUBLIC_SUPABASE_URL!, process.env.SUPABASE_SERVICE_ROLE_KEY!);
+const getGemini = () => new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY! });
 
 const responseSchema: Schema = {
   type: Type.OBJECT,
@@ -58,6 +53,9 @@ const responseSchema: Schema = {
 
 export async function POST(req: Request) {
   try {
+    const supabase = getSupabase();
+    const ai = getGemini();
+
     const body = await req.json();
     const { query } = body;
 
