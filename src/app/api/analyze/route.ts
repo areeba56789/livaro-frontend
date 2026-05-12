@@ -74,7 +74,7 @@ export async function POST(req: Request) {
 
     // 1. Generate Query Embedding
     const embedResponse = await ai.models.embedContent({
-      model: 'gemini-embedding-2',
+      model: 'text-embedding-004',
       contents: query,
       config: {
         outputDimensionality: 768
