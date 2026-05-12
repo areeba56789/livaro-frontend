@@ -6,6 +6,7 @@ import { GoogleGenAI, Type, Schema } from '@google/genai';
 const getSupabase = () => {
   const url = process.env.SUPABASE_URL || process.env.NEXT_PUBLIC_SUPABASE_URL;
   if (!url) throw new Error("Missing Supabase URL environment variable");
+  if (!url.startsWith('http')) throw new Error(`Supabase URL is malformed in Vercel! Value starts with: "${url.substring(0, 15)}..." Make sure it has no quotes and starts with https://`);
   if (!process.env.SUPABASE_SERVICE_ROLE_KEY) throw new Error("Missing Supabase Service Role Key");
   return createClient(url, process.env.SUPABASE_SERVICE_ROLE_KEY);
 };
