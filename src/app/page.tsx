@@ -1,8 +1,9 @@
+import MasterShell from '@/components/MasterShell';
+
 export default function Home() {
   return (
-    <div style={{ padding: '2rem', fontFamily: 'sans-serif' }}>
-      <h1>Livaro API is Live</h1>
-      <p>Send a POST request to /api/analyze to use the real estate AI.</p>
-    </div>
+    <main className="w-full min-h-screen bg-black">
+      <MasterShell />
+    </main>
   );
 }
