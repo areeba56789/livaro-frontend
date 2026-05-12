@@ -73,22 +73,15 @@ export async function POST(req: Request) {
     }
 
     // 1. Generate Query Embedding
-    const embedRes = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/text-embedding-004:embedContent?key=${process.env.GEMINI_API_KEY}`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        model: 'models/text-embedding-004',
-        content: { parts: [{ text: query }] }
-      })
+    const embedResponse = await ai.models.embedContent({
+      model: 'gemini-embedding-001',
+      contents: query,
+      config: {
+        outputDimensionality: 768
+      }
     });
-    
-    if (!embedRes.ok) {
-        const errText = await embedRes.text();
-        throw new Error(`Gemini API Error: ${errText}`);
-    }
 
-    const embedData = await embedRes.json();
-    const queryVector = embedData.embedding?.values;
+    const queryVector = embedResponse.embeddings?.[0]?.values;
 
     if (!queryVector) {
       return NextResponse.json({ error: 'Failed to generate embedding', status: 500 }, { status: 500 });
