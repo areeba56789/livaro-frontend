@@ -3,8 +3,16 @@ import { createClient } from '@supabase/supabase-js';
 import { GoogleGenAI, Type, Schema } from '@google/genai';
 
 // Lazy Setup to prevent Next.js build-time module evaluation errors
-const getSupabase = () => createClient(process.env.NEXT_PUBLIC_SUPABASE_URL!, process.env.SUPABASE_SERVICE_ROLE_KEY!);
-const getGemini = () => new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY! });
+const getSupabase = () => {
+  const url = process.env.SUPABASE_URL || process.env.NEXT_PUBLIC_SUPABASE_URL;
+  if (!url) throw new Error("Missing Supabase URL environment variable");
+  if (!process.env.SUPABASE_SERVICE_ROLE_KEY) throw new Error("Missing Supabase Service Role Key");
+  return createClient(url, process.env.SUPABASE_SERVICE_ROLE_KEY);
+};
+const getGemini = () => {
+  if (!process.env.GEMINI_API_KEY) throw new Error("Missing Gemini API Key");
+  return new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
+};
 
 const responseSchema: Schema = {
   type: Type.OBJECT,
