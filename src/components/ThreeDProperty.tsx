@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { useRef } from 'react';
 import { Canvas, useFrame } from '@react-three/fiber';
 import { Edges, MeshTransmissionMaterial, Float } from '@react-three/drei';

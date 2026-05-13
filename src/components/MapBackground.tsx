@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import Map from 'react-map-gl';
+import Map from 'react-map-gl/mapbox';
 import 'mapbox-gl/dist/mapbox-gl.css';
 
 export default function MapBackground() {
