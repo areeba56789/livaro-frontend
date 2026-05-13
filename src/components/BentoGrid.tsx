@@ -47,8 +47,8 @@ export default function BentoGrid({ data, loading, onSearch }: BentoGridProps) {
   return (
     <div ref={container} className="relative z-10 w-full max-w-7xl mx-auto min-h-screen p-6 md:p-12 flex flex-col pt-24 pointer-events-none">
       
-      {/* Search Bar - Make it interactive */}
-      <div className="absolute top-6 left-1/2 transform -translate-x-1/2 w-full max-w-xl pointer-events-auto bento-item opacity-0">
+      {/* Search Bar - Make it interactive and ensure it stays on top */}
+      <div className="absolute top-6 left-1/2 transform -translate-x-1/2 w-full max-w-xl pointer-events-auto bento-item opacity-0 z-50">
         <form onSubmit={handleSearch} className="relative group">
           <div className="absolute inset-0 bg-teal-500/20 blur-xl rounded-full group-hover:bg-teal-500/30 transition-all duration-500" />
           <div className="relative bg-black/40 backdrop-blur-xl border border-white/10 rounded-full p-2 flex items-center shadow-2xl">
@@ -66,10 +66,10 @@ export default function BentoGrid({ data, loading, onSearch }: BentoGridProps) {
         </form>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 flex-1 max-h-[80vh] pointer-events-auto">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 flex-1 pointer-events-auto mt-4">
         
         {/* Primary Verdict Card */}
-        <div className="md:col-span-2 bg-black/40 backdrop-blur-xl border border-white/10 rounded-3xl p-8 flex flex-col relative overflow-hidden bento-item opacity-0 shadow-2xl">
+        <div className="md:col-span-2 bg-white/5 backdrop-blur-lg border border-white/10 rounded-3xl p-8 flex flex-col relative overflow-hidden bento-item opacity-0 shadow-[0_8px_32px_rgba(0,0,0,0.3)]">
           <div className="flex justify-between items-start mb-6 z-10">
             <div>
               <h2 className="text-teal-400 font-bold tracking-widest text-sm uppercase flex items-center gap-2">
@@ -95,9 +95,9 @@ export default function BentoGrid({ data, loading, onSearch }: BentoGridProps) {
         </div>
 
         {/* Why Matrix */}
-        <div className="md:col-span-3 bg-black/40 backdrop-blur-xl border border-white/10 rounded-3xl p-8 bento-item opacity-0 shadow-2xl flex flex-col">
+        <div className="md:col-span-3 bg-white/5 backdrop-blur-lg border border-white/10 rounded-3xl p-8 bento-item opacity-0 shadow-[0_8px_32px_rgba(0,0,0,0.3)] flex flex-col">
            <h3 className="text-white/60 font-medium uppercase tracking-widest text-xs mb-6">The 'Why' Matrix Ledger</h3>
-           <div className="flex-1 overflow-y-auto space-y-4 pr-4 custom-scrollbar">
+           <div className="max-h-[300px] overflow-y-auto space-y-4 pr-4 custom-scrollbar">
              {loading ? (
                <div className="flex space-x-2 items-center h-full">
                  <div className="w-2 h-2 bg-teal-500 rounded-full animate-ping"></div>
@@ -120,7 +120,7 @@ export default function BentoGrid({ data, loading, onSearch }: BentoGridProps) {
 
 function MetricCard({ title, icon, value, prefix = "", suffix = "" }: any) {
   return (
-    <div className="bg-black/40 backdrop-blur-xl border border-white/10 rounded-3xl p-6 flex flex-col justify-between hover:bg-white/5 transition-colors group shadow-2xl">
+    <div className="bg-white/5 backdrop-blur-lg border border-white/10 rounded-3xl p-6 flex flex-col justify-between hover:bg-white/10 transition-colors group shadow-[0_8px_32px_rgba(0,0,0,0.3)]">
       <div className="text-white/40 group-hover:text-teal-400 transition-colors">
         {React.cloneElement(icon, { className: 'w-6 h-6' })}
       </div>

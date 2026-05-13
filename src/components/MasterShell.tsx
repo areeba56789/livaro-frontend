@@ -69,9 +69,9 @@ export default function MasterShell() {
   }, { scope: shellRef });
 
   return (
-    <div ref={shellRef} className="relative w-full h-screen overflow-hidden bg-neutral-950 font-sans text-neutral-100 selection:bg-teal-500/30">
+    <div ref={shellRef} className="relative w-full min-h-screen bg-neutral-950 font-sans text-neutral-100 selection:bg-teal-500/30">
       <MapBackground />
-      <div className="absolute inset-0 overflow-y-auto overflow-x-hidden">
+      <div className="relative z-10 w-full pb-24">
          <BentoGrid data={data} loading={loading} onSearch={fetchAnalysis} />
       </div>
     </div>

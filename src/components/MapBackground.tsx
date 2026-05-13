@@ -18,7 +18,7 @@ export default function MapBackground() {
   }
 
   return (
-    <div className="absolute inset-0 z-0 opacity-0 mapbox-container">
+    <div className="fixed inset-0 -z-10 opacity-0 mapbox-container">
       <Map
         mapboxAccessToken={mapboxToken}
         initialViewState={{
