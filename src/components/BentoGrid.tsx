@@ -21,7 +21,7 @@ export default function BentoGrid({ data, loading, onSearch }: BentoGridProps) {
     if (!loading && data) {
       // Counter animation for metrics
       gsap.to('.metric-value', {
-        innerText: (i, target) => target.dataset.val,
+        innerText: (i: number, target: HTMLElement) => target.dataset.val,
         duration: 2,
         snap: { innerText: 1 },
         ease: 'power3.out',
