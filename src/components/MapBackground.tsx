@@ -18,9 +18,10 @@ export default function MapBackground() {
   }
 
   return (
-    <div className="fixed inset-0 -z-10 opacity-0 mapbox-container">
+    <div className="fixed inset-0 -z-10 opacity-0 mapbox-container bg-neutral-950">
       <Map
         mapboxAccessToken={mapboxToken}
+        style={{ width: '100vw', height: '100vh' }}
         initialViewState={{
           longitude: 74.4371, // DHA Phase 6 roughly (Lahore, Pakistan)
           latitude: 31.4684,
