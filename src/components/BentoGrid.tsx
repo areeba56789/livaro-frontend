@@ -126,10 +126,10 @@ function MetricCard({ title, icon, value, prefix = "", suffix = "" }: any) {
       </div>
       <div className="mt-4">
         <div className="text-white/50 text-xs uppercase tracking-widest font-semibold mb-1">{title}</div>
-        <div className="text-3xl font-light text-white flex items-baseline gap-1">
-          {prefix && <span className="text-lg text-white/50">{prefix}</span>}
-          <span className="metric-value font-mono" data-val={value}>0</span>
-          {suffix && <span className="text-lg text-white/50">{suffix}</span>}
+        <div className="text-2xl xl:text-3xl font-light text-white flex flex-wrap items-baseline gap-x-1">
+          {prefix && <span className="text-base xl:text-lg text-white/50">{prefix}</span>}
+          <span className="metric-value font-mono truncate max-w-full" data-val={value}>0</span>
+          {suffix && <span className="text-base xl:text-lg text-white/50 shrink-0">{suffix}</span>}
         </div>
       </div>
     </div>
