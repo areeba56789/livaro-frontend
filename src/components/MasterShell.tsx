@@ -14,10 +14,18 @@ if (typeof window !== 'undefined') {
 
 export default function MasterShell() {
   const [data, setData] = useState<AnalysisReport | null>(null);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   const shellRef = useRef<HTMLDivElement>(null);
+  const inputRef = useRef<HTMLInputElement>(null);
 
   const [toastError, setToastError] = useState<string | null>(null);
+
+  const handleSearchSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (inputRef.current?.value) {
+      fetchAnalysis(inputRef.current.value);
+    }
+  };
 
   const fetchAnalysis = async (query: string) => {
     setLoading(true);
@@ -82,8 +90,31 @@ export default function MasterShell() {
   return (
     <div ref={shellRef} className="relative w-full min-h-screen bg-transparent font-sans text-neutral-100 selection:bg-teal-500/30">
       <MapBackground />
+      
+      {/* Search Header Container */}
+      <div className="relative z-50 w-full pt-8 pb-4 px-6 md:px-12 flex justify-center pointer-events-none">
+        <div className="w-full max-w-xl pointer-events-auto">
+          <form onSubmit={handleSearchSubmit} className="relative group">
+            <div className="absolute inset-0 bg-teal-500/20 blur-xl rounded-full group-hover:bg-teal-500/30 transition-all duration-500" />
+            <div className="relative bg-black/40 backdrop-blur-xl border border-white/10 rounded-full p-2 flex items-center shadow-2xl">
+              <svg className="w-5 h-5 text-teal-400 ml-4 mr-2 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+              <input
+                ref={inputRef}
+                type="text"
+                placeholder="Analyze a property or location..."
+                disabled={loading}
+                className="bg-transparent text-white/90 placeholder-white/40 w-full focus:outline-none px-2 py-1 font-medium tracking-wide"
+              />
+              <button type="submit" disabled={loading} className="bg-teal-500 hover:bg-teal-400 disabled:opacity-50 disabled:hover:bg-teal-500 text-white px-6 py-2 rounded-full font-semibold transition-colors shadow-[0_0_15px_rgba(20,184,166,0.5)]">
+                {loading ? 'Analyzing...' : 'Analyze'}
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+
       <div className="relative z-10 w-full pb-24">
-         <BentoGrid data={data} loading={loading} onSearch={fetchAnalysis} />
+         <BentoGrid data={data} loading={loading} />
       </div>
 
       {toastError && (

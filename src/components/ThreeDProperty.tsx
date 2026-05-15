@@ -1,7 +1,7 @@
 // @ts-nocheck
 import { useRef } from 'react';
 import { Canvas, useFrame } from '@react-three/fiber';
-import { Edges, MeshTransmissionMaterial, Float } from '@react-three/drei';
+import { Edges, Float } from '@react-three/drei';
 import * as THREE from 'three';
 
 function RotatingCube({ isResolving }: { isResolving: boolean }) {
@@ -20,22 +20,15 @@ function RotatingCube({ isResolving }: { isResolving: boolean }) {
         <boxGeometry args={[2, 2, 2]} />
         {isResolving ? (
           // Frosted glass cube when resolved
-          <MeshTransmissionMaterial
-            backside
-            samples={4}
-            thickness={2}
-            roughness={0.2}
+          <meshPhysicalMaterial
+            transparent
             transmission={1}
+            opacity={1}
+            roughness={0.2}
+            thickness={2}
             ior={1.5}
-            chromaticAberration={0.04}
-            anisotropy={0.1}
-            distortion={0.1}
-            distortionScale={0.3}
-            temporalDistortion={0.1}
             clearcoat={1}
-            attenuationDistance={0.5}
-            attenuationColor="#ffffff"
-            color="#2dd4bf" // Teal tint
+            color="#2dd4bf"
           />
         ) : (
           // Neon wireframe when loading

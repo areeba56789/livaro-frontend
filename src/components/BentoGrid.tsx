@@ -5,17 +5,16 @@ import gsap from 'gsap';
 import { useGSAP } from '@gsap/react';
 import ThreeDProperty from './ThreeDProperty';
 import { AnalysisReport } from '@/types/rag';
-import { TrendingUp, Activity, DollarSign, BrainCircuit, Search } from 'lucide-react';
+import { TrendingUp, Activity, DollarSign, BrainCircuit } from 'lucide-react';
+import { AreaChart, Area, ResponsiveContainer, Tooltip, XAxis } from 'recharts';
 
 interface BentoGridProps {
   data: AnalysisReport | null;
   loading: boolean;
-  onSearch: (query: string) => void;
 }
 
-export default function BentoGrid({ data, loading, onSearch }: BentoGridProps) {
+export default function BentoGrid({ data, loading }: BentoGridProps) {
   const container = useRef<HTMLDivElement>(null);
-  const inputRef = useRef<HTMLInputElement>(null);
 
   useGSAP(() => {
     if (!loading && data) {
@@ -37,34 +36,8 @@ export default function BentoGrid({ data, loading, onSearch }: BentoGridProps) {
     }
   }, [data, loading]);
 
-  const handleSearch = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (inputRef.current?.value) {
-      onSearch(inputRef.current.value);
-    }
-  };
-
   return (
-    <div ref={container} className="relative z-10 w-full max-w-7xl mx-auto min-h-screen p-6 md:p-12 flex flex-col pt-24 pointer-events-none">
-      
-      {/* Search Bar - Make it interactive and ensure it stays on top */}
-      <div className="absolute top-6 left-1/2 transform -translate-x-1/2 w-full max-w-xl pointer-events-auto bento-item opacity-0 z-50">
-        <form onSubmit={handleSearch} className="relative group">
-          <div className="absolute inset-0 bg-teal-500/20 blur-xl rounded-full group-hover:bg-teal-500/30 transition-all duration-500" />
-          <div className="relative bg-black/40 backdrop-blur-xl border border-white/10 rounded-full p-2 flex items-center shadow-2xl">
-            <Search className="w-5 h-5 text-teal-400 ml-4 mr-2" />
-            <input
-              ref={inputRef}
-              type="text"
-              placeholder="Analyze a property or location..."
-              className="bg-transparent text-white/90 placeholder-white/40 w-full focus:outline-none px-2 py-1 font-medium tracking-wide"
-            />
-            <button type="submit" className="bg-teal-500 hover:bg-teal-400 text-white px-6 py-2 rounded-full font-semibold transition-colors shadow-[0_0_15px_rgba(20,184,166,0.5)]">
-              Analyze
-            </button>
-          </div>
-        </form>
-      </div>
+    <div ref={container} className="relative z-10 w-full max-w-7xl mx-auto min-h-screen p-6 md:p-12 flex flex-col pt-0 pointer-events-none">
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6 flex-1 pointer-events-auto mt-4">
         
@@ -94,22 +67,52 @@ export default function BentoGrid({ data, loading, onSearch }: BentoGridProps) {
           <MetricCard title="Sentiment" icon={<BrainCircuit />} value={data?.key_metrics?.sentiment_score_1_to_10 || 0} suffix="/10" />
         </div>
 
-        {/* Why Matrix */}
-        <div className="md:col-span-3 bg-white/5 backdrop-blur-lg border border-white/10 rounded-3xl p-8 bento-item opacity-0 shadow-[0_8px_32px_rgba(0,0,0,0.3)] flex flex-col">
-           <h3 className="text-white/60 font-medium uppercase tracking-widest text-xs mb-6">The 'Why' Matrix Ledger</h3>
-           <div className="max-h-[300px] overflow-y-auto space-y-4 pr-4 custom-scrollbar">
-             {loading ? (
-               <div className="flex space-x-2 items-center h-full">
-                 <div className="w-2 h-2 bg-teal-500 rounded-full animate-ping"></div>
-                 <span className="text-teal-500/50 font-mono text-sm ml-2">Calculating logic pathways...</span>
-               </div>
-             ) : data?.why_matrix?.map((item, idx) => (
-               <div key={idx} className="why-item flex items-center justify-between p-4 bg-white/5 border border-white/5 rounded-xl hover:bg-white/10 transition-colors cursor-pointer group">
-                  <span className="text-white/80 font-light tracking-wide">{item.factor}</span>
-                  <div className="h-px flex-1 bg-gradient-to-r from-transparent via-white/10 to-transparent mx-4 group-hover:via-teal-500/50 transition-colors"></div>
-                  <span className="text-teal-400 font-mono text-sm">[0x{Math.floor(Math.random()*1000).toString(16).padStart(3, '0')}]</span>
-               </div>
-             ))}
+        {/* Why Matrix & Chart */}
+        <div className="md:col-span-3 bg-white/5 backdrop-blur-lg border border-white/10 rounded-3xl p-8 bento-item opacity-0 shadow-[0_8px_32px_rgba(0,0,0,0.3)] flex flex-col gap-8 md:flex-row">
+           <div className="flex-1 flex flex-col">
+             <h3 className="text-white/60 font-medium uppercase tracking-widest text-xs mb-6">The 'Why' Matrix Ledger</h3>
+             <div className="max-h-[300px] overflow-y-auto space-y-4 pr-4 custom-scrollbar">
+               {loading ? (
+                 <div className="flex space-x-2 items-center h-full">
+                   <div className="w-2 h-2 bg-teal-500 rounded-full animate-ping"></div>
+                   <span className="text-teal-500/50 font-mono text-sm ml-2">Calculating logic pathways...</span>
+                 </div>
+               ) : data?.why_matrix?.map((item, idx) => (
+                 <div key={idx} className="why-item flex items-center justify-between p-4 bg-white/5 border border-white/5 rounded-xl hover:bg-white/10 transition-colors cursor-pointer group">
+                    <span className="text-white/80 font-light tracking-wide">{item.factor}</span>
+                    <div className="h-px flex-1 bg-gradient-to-r from-transparent via-white/10 to-transparent mx-4 group-hover:via-teal-500/50 transition-colors"></div>
+                    <span className="text-teal-400 font-mono text-sm">[0x{Math.floor(Math.random()*1000).toString(16).padStart(3, '0')}]</span>
+                 </div>
+               ))}
+             </div>
+           </div>
+
+           <div className="flex-1 flex flex-col min-h-[300px] border-t md:border-t-0 md:border-l border-white/10 pt-8 md:pt-0 md:pl-8">
+             <h3 className="text-white/60 font-medium uppercase tracking-widest text-xs mb-6">Price History Projection</h3>
+             <div className="flex-1 w-full h-full min-h-[250px]">
+               {data?.chart_data ? (
+                 <ResponsiveContainer width="100%" height="100%">
+                   <AreaChart data={data.chart_data} margin={{ top: 10, right: 10, left: 0, bottom: 0 }}>
+                     <defs>
+                       <linearGradient id="colorValue" x1="0" y1="0" x2="0" y2="1">
+                         <stop offset="5%" stopColor="#2dd4bf" stopOpacity={0.3}/>
+                         <stop offset="95%" stopColor="#2dd4bf" stopOpacity={0}/>
+                       </linearGradient>
+                     </defs>
+                     <XAxis dataKey="period" stroke="#ffffff40" fontSize={12} tickLine={false} axisLine={false} />
+                     <Tooltip 
+                       contentStyle={{ backgroundColor: '#0a0a0a', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '12px', color: '#fff' }}
+                       itemStyle={{ color: '#2dd4bf' }}
+                     />
+                     <Area type="monotone" dataKey="value" stroke="#2dd4bf" strokeWidth={2} fillOpacity={1} fill="url(#colorValue)" />
+                   </AreaChart>
+                 </ResponsiveContainer>
+               ) : (
+                 <div className="w-full h-full flex items-center justify-center text-white/20 font-mono text-sm">
+                   {loading ? 'Awaiting vectors...' : 'No projection data available'}
+                 </div>
+               )}
+             </div>
            </div>
         </div>
 
