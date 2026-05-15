@@ -54,7 +54,7 @@ export default function MasterShell() {
     const tl = gsap.timeline();
 
     // 1. Mapbox background slow fade from black
-    tl.to('.mapbox-container', { opacity: 1, duration: 2.5, ease: 'power2.inOut' });
+    tl.fromTo('.mapbox-container', { opacity: 0 }, { opacity: 1, duration: 2.5, ease: 'power2.inOut' });
 
     // 2. Bento Grid elements spring in from slightly above/below
     gsap.set('.bento-item', { y: 30, opacity: 0 });

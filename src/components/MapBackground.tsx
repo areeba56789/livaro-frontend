@@ -10,17 +10,12 @@ export default function MapBackground() {
     setMounted(true);
   }, []);
 
-  if (!mounted || !mapboxToken) {
-    if (mounted && !mapboxToken) {
-      console.warn("Mapbox token is missing from environment variables.");
-    }
-    return <div className="absolute inset-0 z-0 bg-neutral-950" />;
-  }
-
   return (
-    <div className="fixed inset-0 -z-10 opacity-0 mapbox-container bg-neutral-950">
-      <Map
-        mapboxAccessToken={mapboxToken}
+    <div className="fixed inset-0 -z-10 mapbox-container bg-neutral-950">
+      {mounted && mapboxToken ? (
+        <>
+          <Map
+            mapboxAccessToken={mapboxToken}
         style={{ width: '100vw', height: '100vh' }}
         initialViewState={{
           longitude: 74.4371, // DHA Phase 6 roughly (Lahore, Pakistan)
@@ -31,7 +26,9 @@ export default function MapBackground() {
         }}
         mapStyle="mapbox://styles/mapbox/dark-v11"
         interactive={true} 
-      />
+        />
+        </>
+      ) : null}
       {/* Dark gradient overlay for extreme legibility of the UI on top */}
       <div className="absolute inset-0 bg-gradient-to-b from-black/80 via-black/20 to-black/90 pointer-events-none" />
     </div>
