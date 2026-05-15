@@ -56,7 +56,7 @@ export default function BentoGrid({ data, loading, onSearch }: BentoGridProps) {
             <input
               ref={inputRef}
               type="text"
-              placeholder="Query Palantir..."
+              placeholder="Analyze a property or location..."
               className="bg-transparent text-white/90 placeholder-white/40 w-full focus:outline-none px-2 py-1 font-medium tracking-wide"
             />
             <button type="submit" className="bg-teal-500 hover:bg-teal-400 text-white px-6 py-2 rounded-full font-semibold transition-colors shadow-[0_0_15px_rgba(20,184,166,0.5)]">

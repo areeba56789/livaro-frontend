@@ -26,10 +26,10 @@ export default function MapBackground() {
             }}
             mapStyle="mapbox://styles/mapbox/satellite-streets-v12"
             interactive={true}
-            terrain={{ source: 'mapbox-dem', exaggeration: 1.5 }}
+            terrain={{ source: 'my-mapbox-dem', exaggeration: 1.5 }}
           >
             <Source
-              id="mapbox-dem"
+              id="my-mapbox-dem"
               type="raster-dem"
               url="mapbox://mapbox.mapbox-terrain-dem-v1"
               tileSize={512}

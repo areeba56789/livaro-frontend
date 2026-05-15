@@ -29,11 +29,17 @@ export default function TopNav() {
         {isOpen && (
           <div className="absolute right-0 mt-3 w-56 bg-neutral-900 border border-white/10 rounded-2xl shadow-[0_8px_32px_rgba(0,0,0,0.8)] overflow-hidden animate-in fade-in slide-in-from-top-2 duration-200">
             <div className="py-2">
-              <button className="w-full px-4 py-3 text-left flex items-center gap-3 text-sm text-white/80 hover:bg-white/5 hover:text-white transition-colors">
+              <button 
+                onClick={() => alert('Coming Soon! This feature is still in development.')}
+                className="w-full px-4 py-3 text-left flex items-center gap-3 text-sm text-white/80 hover:bg-white/5 hover:text-white transition-colors"
+              >
                 <Settings className="w-4 h-4" />
                 Profile Settings
               </button>
-              <button className="w-full px-4 py-3 text-left flex items-center gap-3 text-sm text-white/80 hover:bg-white/5 hover:text-white transition-colors">
+              <button 
+                onClick={() => alert('Coming Soon! This feature is still in development.')}
+                className="w-full px-4 py-3 text-left flex items-center gap-3 text-sm text-white/80 hover:bg-white/5 hover:text-white transition-colors"
+              >
                 <CreditCard className="w-4 h-4" />
                 Billing
               </button>

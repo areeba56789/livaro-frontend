@@ -17,8 +17,11 @@ export default function MasterShell() {
   const [loading, setLoading] = useState(true);
   const shellRef = useRef<HTMLDivElement>(null);
 
+  const [toastError, setToastError] = useState<string | null>(null);
+
   const fetchAnalysis = async (query: string) => {
     setLoading(true);
+    setToastError(null);
 
     // Fade out elements before fetching new data if we already have data
     if (data) {
@@ -32,13 +35,21 @@ export default function MasterShell() {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ query }),
+        signal: AbortSignal.timeout(30000) // 30s timeout
       });
       if (res.ok) {
         const json = await res.json();
+        if (json.error) throw new Error(json.error);
         setData(json);
+      } else {
+        throw new Error(`Server returned ${res.status}`);
       }
-    } catch (e) {
+    } catch (e: any) {
       console.error("API Error:", e);
+      setToastError(e.name === 'TimeoutError' ? 'Request timed out. Please try again.' : 'Failed to fetch analysis. Try a different query.');
+      
+      // Animate back the old data if we have it, or just show empty state
+      gsap.to('.bento-item', { opacity: 1, y: 0, duration: 0.5 });
     } finally {
       setLoading(false);
     }
@@ -74,6 +85,13 @@ export default function MasterShell() {
       <div className="relative z-10 w-full pb-24">
          <BentoGrid data={data} loading={loading} onSearch={fetchAnalysis} />
       </div>
+
+      {toastError && (
+        <div className="fixed bottom-4 right-4 z-50 bg-red-500/20 border border-red-500/50 backdrop-blur-md text-white px-6 py-3 rounded-xl shadow-2xl flex items-center gap-3">
+          <svg className="w-5 h-5 text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+          {toastError}
+        </div>
+      )}
     </div>
   );
 }
