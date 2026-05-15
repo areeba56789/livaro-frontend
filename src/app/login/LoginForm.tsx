@@ -12,18 +12,28 @@ export default function LoginForm() {
   const router = useRouter();
   const supabase = createClient();
 
-  const handleEmailLogin = async (e: React.FormEvent) => {
+  const [isSignUp, setIsSignUp] = useState(false);
+
+  const handleEmailAuth = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
     setError(null);
     
-    const { error } = await supabase.auth.signInWithPassword({
-      email,
-      password,
-    });
+    let result;
+    if (isSignUp) {
+      result = await supabase.auth.signUp({
+        email,
+        password,
+      });
+    } else {
+      result = await supabase.auth.signInWithPassword({
+        email,
+        password,
+      });
+    }
 
-    if (error) {
-      setError(error.message);
+    if (result.error) {
+      setError(result.error.message);
       setLoading(false);
     } else {
       router.push('/dashboard');
@@ -46,7 +56,7 @@ export default function LoginForm() {
 
   return (
     <div className="flex flex-col gap-4">
-      <form onSubmit={handleEmailLogin} className="flex flex-col gap-4">
+      <form onSubmit={handleEmailAuth} className="flex flex-col gap-4">
         <div>
           <input
             type="email"
@@ -75,8 +85,18 @@ export default function LoginForm() {
           disabled={loading}
           className="w-full bg-teal-500 hover:bg-teal-400 disabled:opacity-50 text-white font-semibold py-3 rounded-xl transition-all shadow-[0_0_15px_rgba(20,184,166,0.3)]"
         >
-          {loading ? 'Authenticating...' : 'Sign In'}
+          {loading ? 'Authenticating...' : (isSignUp ? 'Sign Up' : 'Sign In')}
         </button>
+        
+        <div className="text-center mt-2">
+          <button 
+            type="button" 
+            onClick={() => setIsSignUp(!isSignUp)} 
+            className="text-white/50 hover:text-white transition-colors text-sm"
+          >
+            {isSignUp ? 'Already have an account? Sign In' : 'Need an account? Sign Up'}
+          </button>
+        </div>
       </form>
 
       <div className="relative flex items-center py-2">

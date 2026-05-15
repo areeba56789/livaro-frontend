@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import Map from 'react-map-gl/mapbox';
+import Map, { Source, Layer } from 'react-map-gl/mapbox';
 import 'mapbox-gl/dist/mapbox-gl.css';
 
 export default function MapBackground() {
@@ -16,17 +16,40 @@ export default function MapBackground() {
         <>
           <Map
             mapboxAccessToken={mapboxToken}
-        style={{ width: '100vw', height: '100vh' }}
-        initialViewState={{
-          longitude: 74.4371, // DHA Phase 6 roughly (Lahore, Pakistan)
-          latitude: 31.4684,
-          zoom: 14,
-          pitch: 60,
-          bearing: -15
-        }}
-        mapStyle="mapbox://styles/mapbox/dark-v11"
-        interactive={true} 
-        />
+            style={{ width: '100vw', height: '100vh' }}
+            initialViewState={{
+              longitude: 74.4371, // DHA Phase 6 roughly (Lahore, Pakistan)
+              latitude: 31.4684,
+              zoom: 15.5,
+              pitch: 70,
+              bearing: -20
+            }}
+            mapStyle="mapbox://styles/mapbox/satellite-streets-v12"
+            interactive={true}
+            terrain={{ source: 'mapbox-dem', exaggeration: 1.5 }}
+          >
+            <Source
+              id="mapbox-dem"
+              type="raster-dem"
+              url="mapbox://mapbox.mapbox-terrain-dem-v1"
+              tileSize={512}
+              maxzoom={14}
+            />
+            <Layer
+              id="3d-buildings"
+              source="composite"
+              source-layer="building"
+              filter={['==', 'extrude', 'true']}
+              type="fill-extrusion"
+              minzoom={15}
+              paint={{
+                'fill-extrusion-color': '#aaa',
+                'fill-extrusion-height': ['get', 'height'],
+                'fill-extrusion-base': ['get', 'min_height'],
+                'fill-extrusion-opacity': 0.6
+              }}
+            />
+          </Map>
         </>
       ) : null}
       {/* Dark gradient overlay for extreme legibility of the UI on top */}
